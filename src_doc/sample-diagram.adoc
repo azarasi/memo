@@ -1,0 +1,279 @@
+= AsciiDoctor-diagramサンプル
+株式会社 あざらし
+v0.1(Draft) 2016/12/12
+:toc: left
+:toc-title: 目次
+:figure-caption: 図
+:table-caption: 表
+:toclevels: 3
+:pagenums:
+:sectnums:
+:imagesdir: ./images
+:source-highlighter: coderay
+:icons: font
+:xrefstyle: short
+
+== セクション
+
+``=`` から始まる行はセクションの見出しになります。 +
+``==``, ``===``, ... のように `=` を重ねるとレベルが1つ下がります。
+
+
+//水平線
+'''
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+=== はじめに　その１
+ええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええ +
+えええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええ。
+ええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええ。
+
+えええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええ。
+
+NOTE: これはNOTEのサンプルです。
+
+TIP: これはTIPのサンプルです。
+
+IMPORTANT: これはIMPOTANTのサンプルです。
+
+CAUTION: これはCAUTIONのサンプルです。
+
+WARNING: これはWARNINNGのサンプルです。
+
+//改頁
+<<<
+
+== 次に
+ああああああああああああああああああああああ。 +
+ええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええええ。
+
+<<fig_azarasi>>による。
+
+[[fig_azarasi]]
+.close up the azarasi
+image::azarasi.jpg[]
+
+//改頁
+<<<
+
+== asciidoctor-diagramのテスト
+
+=== ditaaのテスト
+
+<<ditaa-diagram_test>>はditaaのサンプルです。 +
+ditaaではascii文字のみ使用可能で日本語は無理っぽい。形式はpngのみ。
+
+[[ditaa-diagram_test]]
+.ditaa daiagram sample
+[ditaa,sample-ditaa-diagram]
+----
+                   +-------------+
+                   | Asciidoctor |-------+
+                   |   diagram   |       |
+                   +-------------+       | PNG out
+                       ^                 |
+                       | ditaa in        |
+                       |                 v
+ +--------+   +--------+----+    /---------------\
+ |        | --+ Asciidoctor +--> |               |
+ |  Text  |   +-------------+    |   Beautiful   |
+ |Document|   |   !magic!   |    |    Output     |
+ |     {d}|   |             |    |               |
+ +---+----+   +-------------+    \---------------/
+     :                                   ^
+     |          Lots of work             |
+     +-----------------------------------+
+----
+
+//改頁
+<<<
+
+=== plantumlのテスト
+[line-through]#種類をpngとすれば日本語（UTF-8）でも記述可能。svgとするときはascii文字のみで。# +
+asciidoctor-pdfで使用している日本語フォントに合わせれば、svgでもOKの様子。 +
+しかしIntelliJプラグインのasciidocではsvgは画像が崩れるのでpngにしなければならない。
+
+<<main-classes>>はplantumlのサンプルです。
+
+[[main-classes]]
+.クラス図
+[plantuml,sample-classdiagram,png]
+----
+skinparam {
+  defaultFontName "Migu 1M"
+}
+
+class "クラスAプ" {
+  +メソッド1()
+}
+class "クラスBプ" {
+  +メソッド2()
+}
+class "クラスC" {
+}
+"クラスAプ" -- "クラスBプ"
+"クラスAプ" <|-- "クラスC"
+----
+
+//改頁
+<<<
+
+<<sequence1>>はシーケンス図のサンプルです。
+
+[[sequence1]]
+.シーケンス図
+[plantuml,sample-sequence,png]
+----
+@startuml{plantuml_seq_sample.png}
+skinparam {
+  defaultFontName "Migu 1M"
+}
+
+title シーケンス図のサンプル
+hide footbox
+
+actor ユーザー as user
+participant 制御部 as control <<Control>>
+participant "<u>Loader</u>" as model <<Model>>
+participant 画面 as view <<View>> #98FB98
+
+user -> control : 検索
+activate control
+create model
+control -> model : << new >>
+control -> model : データ検索
+activate model
+control <-- model : 検索結果
+note right : ヒットしたものをリストで返します。プ
+deactivate model
+destroy model
+
+control -> view : 表示(検索結果)
+activate view
+deactivate control
+loop 1, データ数
+  view -> view : データの表示
+end
+view --> user
+deactivate view
+
+@enduml
+----
+
+//改頁
+<<<
+
+=== graphvizのテスト
+[line-through]#種類をpngとすれば日本語（UTF-8）でも記述可能。svgとするときはascii文字のみで。# +
+asciidoctor-pdfで使用している日本語フォントに合わせれば、svgでもOKの様子。
+
+<<fig_diagram>>はGraphVizのサンプルです。
+
+[[fig_diagram]]
+.The graphviz block
+[graphviz,sample-dot-diagram1,svg]
+----
+digraph G {
+  node [
+    fontname = "Migu 1M"
+  ]
+
+	mainメインプ -> parse -> execute;
+	mainメインプ -> init;
+	mainメインプ -> cleanup;
+	execute -> make_string;
+	execute -> printf
+	init -> make_string;
+	mainメインプ -> printf;
+	execute -> compare;
+}
+----
+
+//改頁
+<<<
+
+[[ditaa-diagram_test2]]
+.ditaa daiagram sample2
+image::sample-ditaa-diagram.png[]
+
+
+== 表のテスト
+
+表のサンプルです。
+
+<<tbl.1>>に示す。
+
+[[tbl.1]]
+.ほげほげ一覧
+[width="50",cols="<1,^1,^1",options="header,strong"]
+|=======================
+|Col 1|Col 2      |Col 3
+|1    |Item 1     |a
+|2    |Item 2     |b
+|3    |Item 3     |c
+|=======================
+
+ああああ
+
+[[tbl.2]]
+.ほげほげ2
+[width="50",options="header",align=left]
+|=======================
+|Col 1|Col 2      |Col 3
+|1    |Item 1     |a
+|2    |Item 2     |b
+|3    |Item 3     |c
+|=======================
+
+[[tbl.3]]
+.ほげほげ3
+|=======================
+|Col 1|Col 2      |Col 3
+|1    |Item 1     |a
+|2    |Item 2     |b
+|3    |Item 3     |c
+|=======================
+
+
+[[tbl.4]]
+.Multiline cells, row/col span
+|====
+|Date |Duration |Avg HR |Notes
+|22-Aug-08 .2+^.^|10:24 | 157 |
+Worked out MSHR (max sustainable
+heart rate) by going hard
+for this interval.
+|22-Aug-08 | 152 |
+Back-to-back with previous interval.
+|24-Aug-08 3+^|none
+|====
+
+<<tbl.2>>に示す。 +
+<<tbl.3>>に示す。 +
+<<tbl.4>>に示す。
+
+[[tbl-results]]
+.Results
+[options="header"]
+|====
+| Users | Errors | Tests
+| 8 | 0 | 1639
+|====
+
+<<tbl-results>> は何か重要なことを示している。
+
+
+//改頁
+<<<
+
+== ソースコード
+
+[source, javascript]
+----
+export default class MyComponent extends React.Component {
+    render() {
+        <div>Hello, World!</div>
+    }
+}
+----

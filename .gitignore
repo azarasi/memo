@@ -1,0 +1,6 @@
+doc_output
+out
+.idea
+memo.iml
+src/html
+src_doc/.asciidoctor
