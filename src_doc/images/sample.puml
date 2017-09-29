@@ -3,8 +3,9 @@ title <size:18> クラス図 のサンプル </size>
 skinparam {
   defaultFontName "Migu 1M"
 }
-package Geometry {
 class Canvas
+
+package Geometry {
 abstract Figure {
     #{static} const size_t ParseBufferSize = 256
     +{abstract} size_t getPointsNum()

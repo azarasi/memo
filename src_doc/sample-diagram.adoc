@@ -11,7 +11,7 @@ v0.1(Draft) 2016/12/12
 :imagesdir: ./images
 :source-highlighter: coderay
 :icons: font
-:xrefstyle: short
+:xrefstyle: full
 
 == セクション
 
