@@ -92,7 +92,7 @@ ditaaではascii文字のみ使用可能で日本語は無理っぽい。形式�
 === plantumlのテスト
 [line-through]#種類をpngとすれば日本語（UTF-8）でも記述可能。svgとするときはascii文字のみで。# +
 asciidoctor-pdfで使用している日本語フォントに合わせれば、svgでもOKの様子。 +
-しかしIntelliJプラグインのasciidocではsvgは画像が崩れるのでpngにしなければならない。
+しかしIntelliJプラグインのasciidocでは、swingでもJavaFXでも、svgは画像が崩れるのでpngにしなければならない。
 
 <<main-classes>>はplantumlのサンプルです。
 
@@ -167,12 +167,13 @@ deactivate view
 === graphvizのテスト
 [line-through]#種類をpngとすれば日本語（UTF-8）でも記述可能。svgとするときはascii文字のみで。# +
 asciidoctor-pdfで使用している日本語フォントに合わせれば、svgでもOKの様子。
+しかしIntelliJプラグインのasciidocでは、swingでもJavaFXでも、svgは画像が崩れるのでpngにしなければならない。
 
 <<fig_diagram>>はGraphVizのサンプルです。
 
 [[fig_diagram]]
 .The graphviz block
-[graphviz,sample-dot-diagram1,svg]
+[graphviz,sample-dot-diagram1,png]
 ----
 digraph G {
   node [
