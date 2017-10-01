@@ -5,9 +5,9 @@ out
 memo.iml
 src/html
 src_doc/.asciidoctor
-*.jpg
-*.png
-*.svg
+#*.jpg
+#*.png
+#*.svg
 
 #JAVA system default
 # Compiled class file
