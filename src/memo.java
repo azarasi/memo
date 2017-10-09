@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import javax.imageio.stream.IIOByteBuffer;
 import javax.swing.*;
 import javax.swing.UIManager;
 import javax.swing.event.*;
@@ -21,8 +22,9 @@ public class memo extends JFrame{
     private JFrame frm;
     private JTextArea tx;
     private JTree tree;
-    private Hashtable<String, String> treedata;
+    private Hashtable<String, Integer> treedata;
     private String[] strs;
+    private int line_dat[][];
     private static int win_width = 360, win_height = 640;
 
     public static void main(String[] args) {
@@ -141,35 +143,54 @@ public class memo extends JFrame{
                     byte[] fileContentBytes = Files.readAllBytes(Paths.get(directory));
 // 読み込んだバイト列を UTF-8 でデコードして文字列にする
                     String fileContentStr = new String(fileContentBytes, StandardCharsets.UTF_8);
-                    tx.setText(fileContentStr);
+// 行単位で分割
+                    strs = fileContentStr.split("\r\n");
+//                    tx.setText(fileContentStr);
 
-                    treedata = new Hashtable<String, String>();
+                    treedata = new Hashtable<String, Integer>();
                     DefaultMutableTreeNode root = new DefaultMutableTreeNode("Wzmemo");
                     DefaultMutableTreeNode AA = new DefaultMutableTreeNode();
                     DefaultMutableTreeNode BB = new DefaultMutableTreeNode();
                     DefaultMutableTreeNode CC = new DefaultMutableTreeNode();
-                    strs = fileContentStr.split("\r\n");
-                    int ii = strs.length;
+                    int all_lines = strs.length;
+                    int ii = 0,line_nom = 0,lines = 1;
+                    line_dat = new int[2][all_lines];
                     String AAd,BBd,CCd;
-                    for (int i = 0; i < ii; i++) {
+                    for (int i = 0; i < all_lines; i++) {
                         if (strs[i].length() > 0) {
                             if ((strs[i].charAt(0) == '.') && (strs[i].charAt(1) != '.')) {
+                                ii++;
                                 AAd =strs[i].substring(1,strs[i].length()-14) ;
                                 AA = new DefaultMutableTreeNode(AAd);
                                 root.add(AA);
-                                treedata.put(AAd, String.valueOf(i));
+                                line_nom = i; lines = 1;
+                                treedata.put(AAd, line_nom);
+                                line_dat[0][ii-1] = line_nom;
+                                line_dat[1][ii-1] = lines;
                             } else if ((strs[i].charAt(0) == '.') && (strs[i].charAt(1) == '.') && (strs[i].charAt(2) != '.')) {
-                                BBd =strs[i].substring(1,strs[i].length()-14) ;
+                                ii++;
+                                BBd =strs[i].substring(2,strs[i].length()-14) ;
                                 BB = new DefaultMutableTreeNode(BBd);
                                 AA.add(BB);
-                                treedata.put(BBd, String.valueOf(i));
+                                line_nom = i; lines = 1;
+                                treedata.put(BBd, line_nom);
+                                line_dat[0][ii-1] = line_nom;
+                                line_dat[1][ii-1] = lines;
                             } else if ((strs[i].charAt(0) == '.') && (strs[i].charAt(1) == '.') && (strs[i].charAt(2) == '.')) {
-                                CCd =strs[i].substring(1,strs[i].length()-14) ;
+                                ii++;
+                                CCd =strs[i].substring(3,strs[i].length()-14) ;
                                 CC = new DefaultMutableTreeNode(CCd);
                                 BB.add(CC);
-                                treedata.put(CCd, String.valueOf(i));
+                                line_nom = i; lines = 1;
+                                treedata.put(CCd, line_nom);
+                                line_dat[0][ii-1] = line_nom;
+                                line_dat[1][ii-1] = lines;
                             }
+                            lines++;
+                            line_dat[1][ii-1]= lines;
+
                         }
+                        lines = 0;
                     }
                     DefaultTreeModel model = new DefaultTreeModel(root);
                     tree.setModel(model);
@@ -178,7 +199,24 @@ public class memo extends JFrame{
 
                     frm.setVisible(true);
 
-                } catch (Exception aho) {//例外処理
+                    DefaultMutableTreeNode node = AA;
+                    if (node != null) {
+                        String hskey;
+                        hskey = (String) node.getUserObject();
+                        int hsnom;
+                        hsnom = treedata.get(hskey);
+                        String treedt = strs[hsnom] + "\r\n" + "----------------------\r\n";
+
+                        for (int i=1 ; strs.length>(hsnom + i) && (strs[hsnom + i].length() == 0 || strs[hsnom + i].charAt(0) != '.') ; i++){
+                            treedt = treedt + strs[hsnom + i] + "\r\n";
+                        }
+
+                        tx.setText(treedt);
+                    }
+
+
+                }
+                catch (Exception aho) {//例外処理
                     tx.setText("エラー");
                 }
             }
@@ -224,7 +262,7 @@ public class memo extends JFrame{
                 String hskey;
                 hskey = (String) node.getUserObject();
                 int hsnom;
-                hsnom = Integer.parseInt(treedata.get(hskey));
+                hsnom = treedata.get(hskey);
                 String treedt = strs[hsnom] + "\r\n" + "----------------------\r\n";
 
                 for (int i=1 ; strs.length>(hsnom + i) && (strs[hsnom + i].length() == 0 || strs[hsnom + i].charAt(0) != '.') ; i++){
